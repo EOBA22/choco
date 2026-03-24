@@ -118,4 +118,173 @@ jobs:
         path: |
           code_drop/TestResults/issues-report.html
           code_drop/TestResults/NUnit/TestResult.xml
-          code_drop/MsBuild.log
+       
+						code_drop/MsBuild.log
+ - nombre: Caché
+  Usos: actions/cache@v5.0.4
+  con:
+    # Una lista de archivos, directorios y patrones comodín para almacenar en caché y restaurar.
+    camino:
+    # Una clave explícita para restaurar y guardar la caché
+    llave:
+    # Una cadena multilínea ordenada que enumera las claves que coinciden con el prefijo, las cuales se utilizan para restaurar la caché obsoleta si no se produjo ningún acierto de caché para la clave. Tenga en cuenta que `cache-hit` devuelve falso en este caso.
+    restaurar-claves: # opcional
+    # Tamaño del fragmento utilizado para dividir archivos grandes durante la carga, en bytes.
+    tamaño-fragmento-de-carga: # opcional
+    # Un valor booleano opcional que, cuando está habilitado, permite a los ejecutores de Windows guardar o restaurar cachés que se pueden restaurar o guardar respectivamente en otras plataformas.
+    enableCrossOsArchive: # opcional, el valor predeterminado es falso
+    # Si no se encuentra la entrada de caché, el flujo de trabajo fallará.
+    fail-on-cache-miss: # opcional, el valor predeterminado es falso
+    # Comprueba si existe una entrada en la caché para la(s) entrada(s) dada(s) (clave, claves de restauración) sin descargar la caché.
+    solo búsqueda: # opcional, el valor predeterminado es falso
+    # Ejecuta el paso posterior para guardar la caché incluso si falla otro paso anterior.
+    guardar siempre: # opcional, por defecto es falso
+
+
+            - nombre: Cargar un artefacto de compilación
+  Usos: actions/upload-artifact@v3.2.2
+  con:
+    # Nombre del artefacto
+    nombre: # opcional, por defecto es artefacto
+    # Un archivo, directorio o patrón comodín que describe qué subir
+    camino:
+    # El comportamiento deseado si no se encuentran archivos utilizando la ruta proporcionada.
+Opciones disponibles:
+  advertir: Mostrar una advertencia pero no hacer que falle la acción.
+  error: La acción falla con un mensaje de error
+  ignorar: No se mostrarán advertencias ni errores, la acción no falla.
+
+ if-no-files-found: # opcional, el valor predeterminado es advertir
+    # Duración tras la cual el artefacto caducará en días. 0 significa usar la retención predeterminada.
+Mínimo 1 día. Máximo 90 días, a menos que se modifique en la página de configuración del repositorio.
+
+días de retención: # opcional
+    # Si es verdadero, los archivos ocultos se incluirán en el artefacto cargado. Si es falso, los archivos ocultos se excluirán del artefacto cargado.
+
+    include-hidden-files: # opcional, el valor predeterminado es falso
+
+
+
+  - nombre: Cerrar problemas obsoletos
+  Usos: actions/stale@v10.2.0
+  con:
+    # Token para el repositorio. Se puede pasar usando `{{ secrets.GITHUB_TOKEN }}`.
+    token del repositorio: # opcional, el valor predeterminado es ${{ github.token }}
+    # El mensaje que se publicará en el problema al etiquetarlo. Si no se proporciona ninguno, no se marcarán los problemas como obsoletos.
+    mensaje de problema obsoleto: # opcional
+    # El mensaje que se publicará en la solicitud de extracción al etiquetarla. Si no se proporciona ninguno, no se marcarán las solicitudes de extracción como obsoletas.
+    mensaje pr obsoleto: # opcional
+    # El mensaje que se publicará en el problema al cerrarlo. Si no se proporciona ninguno, no se comentará al cerrar el problema.
+    mensaje de cierre de incidencia: # opcional
+    # El mensaje que se publicará en la solicitud de extracción al cerrarla. Si no se proporciona ninguno, no se comentará al cerrar la solicitud de extracción.
+    close-pr-message: # opcional
+    # El número de días que puede tener un problema o una solicitud de extracción antes de que se marque como obsoleto. Establezca el valor en -1 para que los problemas o las solicitudes de extracción nunca se marquen automáticamente como obsoletos.
+    días antes de que caduque: # opcional, el valor predeterminado es 60
+    # El número de días que puede tener un problema antes de que se marque como obsoleto. Establezca el valor en -1 para que los problemas nunca se marquen como obsoletos automáticamente. Anule la opción "días antes de que se marque como obsoleto" solo para los problemas.
+    días-antes-de-emitir-obsoleto: # opcional
+    # Número de días que puede tener una solicitud de extracción antes de que se marque como obsoleta. Establezca el valor en -1 para que las solicitudes de extracción nunca se marquen como obsoletas automáticamente. Anule la opción "days-before-stale" solo para las solicitudes de extracción.
+    días antes de que la pr esté obsoleta: # opcional
+    # El número de días que se deben esperar para cerrar un problema o una solicitud de extracción después de que se haya marcado como inactivo. Establezca el valor en -1 para no cerrar nunca los problemas o solicitudes de extracción inactivos.
+    días antes del cierre: # opcional, el valor predeterminado es 7
+    # El número de días que se deben esperar para cerrar un problema después de que se haya marcado como inactivo. Establezca el valor en -1 para no cerrar nunca los problemas inactivos. Anule la opción "días antes del cierre" solo para los problemas.
+    días antes del cierre del problema: # opcional
+    # El número de días que se deben esperar para cerrar una solicitud de extracción después de que se haya marcado como obsoleta. Establezca el valor en -1 para no cerrar nunca las solicitudes de extracción obsoletas. Anule la opción "days-before-close" solo para las solicitudes de extracción.
+    días antes del cierre de relaciones públicas: # opcional
+    # La etiqueta que se aplicará cuando un problema esté obsoleto.
+    etiqueta-de-problema-obsoleto: # opcional, el valor predeterminado es Obsoleto
+    # La etiqueta que se aplicará cuando se cierre un problema.
+    etiqueta-de-cierre-de-incidencia: # opcional
+    # Las etiquetas que indican que un problema está exento de ser marcado como obsoleto. Separe las etiquetas múltiples con comas (por ejemplo, "etiqueta1,etiqueta2").
+    etiquetas-de-problema-excluidas: # opcional, el valor predeterminado es
+    # El motivo para usarlo al cerrar un problema.
+    motivo de cierre del problema: # opcional, el valor predeterminado es not_planned
+    # La etiqueta que se aplicará cuando una solicitud de extracción esté obsoleta.
+    etiqueta-de-proceso-obsoleto: # opcional, el valor predeterminado es Obsoleto
+    # La etiqueta que se aplicará cuando se cierre una solicitud de extracción.
+    etiqueta-pr-close: # opcional
+    # Las etiquetas que indican que una solicitud de extracción está exenta de ser marcada como obsoleta. Separe las etiquetas múltiples con comas (por ejemplo, "etiqueta1,etiqueta2").
+    exempt-pr-labels: # opcional, el valor predeterminado es
+    # Los hitos que indican que un problema o una solicitud de extracción está exento de ser marcado como obsoleto. Separe los hitos múltiples con comas (por ejemplo, "hito1,hito2").
+    eximir-milestones: # opcional, el valor predeterminado es
+    # Los hitos que hacen que un problema esté exento de ser marcado como obsoleto. Separe los hitos múltiples con comas (por ejemplo, "hito1,hito2"). Anule la opción "exempt-milestones" solo con respecto a los problemas.
+    eximir-problemas-hitos: # opcional, el valor predeterminado es
+    # Los hitos que hacen que una solicitud de extracción esté exenta de ser marcada como obsoleta. Separe los hitos múltiples con comas (por ejemplo, "hito1,hito2"). Anule la opción "exempt-milestones" solo con respecto a las solicitudes de extracción.
+    eximir-hitos-pr: # opcional, el valor predeterminado es
+    # Exime de ser marcados como obsoletos todos los problemas y solicitudes de extracción con hitos. El valor predeterminado es falso.
+    eximir todos los hitos: # opcional, el valor predeterminado es falso
+    # Exime a todos los problemas con hitos de ser marcados como obsoletos. Anula la opción "exempt-all-milestones" solo con respecto a los problemas.
+    eximir todos los hitos de los problemas: # opcional, el valor predeterminado es
+    # Exime a todas las solicitudes de extracción con hitos de ser marcadas como obsoletas. Anula la opción "exempt-all-milestones" solo para las solicitudes de extracción.
+    eximir todos los hitos de pr: # opcional, el valor predeterminado es
+    # Solo se comprueban los problemas o solicitudes de extracción con todas estas etiquetas si están obsoletos. El valor predeterminado es `` (deshabilitado) y puede ser una lista de etiquetas separadas por comas.
+    only-labels: # opcional, el valor predeterminado es
+    # Solo se comprueban los problemas o solicitudes de extracción con al menos una de estas etiquetas si están obsoletos. El valor predeterminado es `` (deshabilitado) y puede ser una lista de etiquetas separadas por comas.
+    cualquiera de las etiquetas: # opcional, el valor predeterminado es
+    # Solo se comprueban los problemas con al menos una de estas etiquetas si están desactualizados. El valor predeterminado es `` (deshabilitado) y puede ser una lista de etiquetas separadas por comas. Anula la opción "cualquiera de las etiquetas" solo para los problemas.
+    cualquier-de-etiquetas-de-problema: # opcional, el valor predeterminado es
+    # Solo se revisan las solicitudes de extracción con al menos una de estas etiquetas si están desactualizadas. El valor predeterminado es `` (deshabilitado) y puede ser una lista de etiquetas separadas por comas. Anula la opción "cualquiera de las etiquetas" solo para las solicitudes de extracción.
+    cualquiera de las etiquetas pr: # opcional, el valor predeterminado es
+    # Solo se revisan los problemas con todas estas etiquetas si están desactualizados. Por defecto es `[]` (deshabilitado) y puede ser una lista de etiquetas separadas por comas. Anula la opción "only-labels" para referirse únicamente a los problemas.
+    only-issue-labels: # opcional, el valor predeterminado es
+    # Solo se revisan las solicitudes de extracción con todas estas etiquetas si están desactualizadas. Por defecto es `[]` (deshabilitado) y puede ser una lista de etiquetas separadas por comas. Anula la opción "only-labels" para que solo se aplique a las solicitudes de extracción.
+    only-pr-labels: # opcional, el valor predeterminado es
+    # El número máximo de operaciones por ejecución, utilizado para controlar la limitación de velocidad (relacionado con las operaciones CRUD de la API de GitHub).
+    operaciones-por-ejecución: # opcional, el valor predeterminado es 30
+    # Eliminar las etiquetas obsoletas de los problemas y las solicitudes de extracción cuando se actualicen o se comenten.
+    remove-stale-when-updated: # opcional, el valor predeterminado es true
+    # Elimina las etiquetas obsoletas de los problemas cuando se actualizan o se comentan. Anula la opción "remove-stale-when-updated" solo para los problemas.
+    remove-issue-stale-when-updated: # opcional, el valor predeterminado es
+    # Elimina las etiquetas obsoletas de las solicitudes de extracción cuando se actualizan o se comentan. Anula la opción "remove-stale-when-updated" solo para las solicitudes de extracción.
+    remove-pr-stale-when-updated: # opcional, el valor predeterminado es
+    # Ejecutar el procesador en modo de depuración sin realizar realmente ninguna operación en los problemas reales.
+    debug-only: # opcional, el valor predeterminado es falso
+    # El orden en que se obtienen los problemas o las solicitudes de extracción. Por defecto es falso, que es descendente.
+    ascendente: # opcional, el valor predeterminado es falso
+    # Criterio de ordenación de los resultados. Las opciones válidas son `created`, `updated` y `comments`. Por defecto, se utiliza `created`.
+    ordenar por: # opcional, por defecto se crea
+    # Elimina la rama de git después de cerrar una solicitud de extracción obsoleta.
+    eliminar-rama: # opcional, por defecto es falso
+    # La fecha utilizada para omitir la acción de obsolescencia en incidencias/solicitudes de extracción creadas antes de ella (ISO 8601 o RFC 2822).
+    fecha de inicio: # opcional, el valor predeterminado es
+    # Los responsables que eximen a un problema o una solicitud de extracción de ser marcados como obsoletos. Separe los responsables con comas (por ejemplo, "usuario1,usuario2").
+    eximidos-asignatarios: # opcional, el valor predeterminado es
+    # Los responsables que eximen a un problema de ser marcado como obsoleto. Separe los responsables con comas (por ejemplo, "usuario1,usuario2"). Anule la opción "exempt-assignees" solo para los problemas.
+    eximir-emisión-asignados: # opcional, el valor predeterminado es
+    # Los responsables que eximen a una solicitud de extracción de ser marcada como obsoleta. Separe los responsables con comas (por ejemplo, "usuario1,usuario2"). Anule la opción "exempt-assignees" solo para las solicitudes de extracción.
+    eximir-pr-asesinos: # opcional, el valor predeterminado es
+    # Exime de ser marcados como obsoletos todos los problemas y solicitudes de extracción con responsables asignados. El valor predeterminado es falso.
+    eximir-a-todos-los-asignatarios: # opcional, el valor predeterminado es falso
+    # Exime a todos los problemas con responsables asignados de ser marcados como obsoletos. Anula la opción "exempt-all-assignees" solo con respecto a los problemas.
+    eximir-todos-los-asesinos-de-la-emisión: # opcional, el valor predeterminado es
+    # Exime a todas las solicitudes de extracción con responsables asignados de ser marcadas como obsoletas. Anula la opción "exempt-all-assignees" solo para las solicitudes de extracción.
+    eximir-todos-los-apellidos-de-pr: # opcional, el valor predeterminado es
+    # Exime a las solicitudes de extracción en borrador de ser marcadas como obsoletas. Por defecto, es falso.
+    eximir-borrador-pr: # opcional, el valor predeterminado es falso
+    # Mostrar algunas estadísticas al final sobre el flujo de trabajo obsoleto (solo cuando los registros estén habilitados).
+    habilitar-estadísticas: # opcional, el valor predeterminado es verdadero
+    # Una lista de etiquetas separadas por comas para agregar cuando un problema o solicitud de extracción deja de estar obsoleto.
+    etiquetas-a-agregar-cuando-no-esté-obsoleto: # opcional, el valor predeterminado es
+    # Una lista de etiquetas separadas por comas que se eliminarán cuando un problema o una solicitud de extracción quede obsoleto.
+    etiquetas-a-eliminar-cuando-obsoleto: # opcional, el valor predeterminado es
+    # Una lista de etiquetas separadas por comas que se eliminarán cuando un problema o una solicitud de extracción deje de estar obsoleto.
+    etiquetas-a-eliminar-cuando-no-esté-obsoleto: # opcional, el valor predeterminado es
+    # Cualquier actualización (actualización/comentario) puede restablecer el tiempo de inactividad en los problemas y solicitudes de extracción.
+    ignore-updates: # opcional, el valor predeterminado es falso
+    # Cualquier actualización (actualización/comentario) puede restablecer el tiempo de inactividad en los problemas. Anule la opción "ignore-updates" solo con respecto a los problemas.
+    ignore-issue-updates: # opcional, el valor predeterminado es
+    # Cualquier actualización (actualización/comentario) puede restablecer el tiempo de inactividad en las solicitudes de extracción. Anule la opción "ignore-updates" solo con respecto a las solicitudes de extracción.
+    ignore-pr-updates: # opcional, el valor predeterminado es
+    # Solo los problemas o las solicitudes de extracción con un responsable asignado se marcarán automáticamente como obsoletos.
+    include-only-assigned: # opcional, el valor predeterminado es falso
+    # Solo los problemas con un tipo coincidente se procesan como obsoletos/cerrados. Por defecto es `[]` (deshabilitado) y puede ser una lista de tipos de problemas separados por comas.
+    only-issue-types: # opcional, el valor predeterminado es
+
+
+- nombre: Descargar un artefacto de compilación
+  Usos: actions/download-artifact@v3.1.0
+  con:
+    # Nombre del artefacto
+    nombre: # opcional
+    # Ruta de destino
+    ruta: # opcional
+          														
