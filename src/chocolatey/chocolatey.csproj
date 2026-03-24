@@ -33,7 +33,7 @@
   <PropertyGroup>
     <ApplicationIcon>$(SolutionDir)\..\docs\logo\chocolatey.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(CHOCOLATEY_OFFICIAL_KEY)' == ''">
+  <PropertyGroup Condition="'$(CHOCOLATEY_OFFICIAL_KEY)' == '' OR !Exists('$(CHOCOLATEY_OFFICIAL_KEY')">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\chocolatey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -93,7 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AlphaFS" Version="2.2.6" />
-    <PackageReference Include="Chocolatey.NuGet.PackageManagement" Version="3.4.3" />
+    <PackageReference Include="Chocolatey.NuGet.PackageManagement" Version="3.5.0" />
     <PackageReference Include="log4net" Version="3.2.0" />
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers">
