@@ -338,7 +338,7 @@ object ChocolateyDockerWin : BuildType({
     steps {
         script {
             name = "Call Cake"
-            scriptContent = "call build.official.bat --verbosity=diagnostic --target=Docker"
+            scriptContent = "call build.official.bat --verbosity=diagnostic --target=Docker --shouldRunTests=false --shouldRunAnalyze=false"
         }
     }
 
@@ -381,6 +381,7 @@ object ChocolateyPosix : BuildType({
     params {
         param("env.CAKE_NUGET_SOURCE", "") // The Cake version we use has issues with authing to our private source on Linux
         param("env.PRIMARY_NUGET_SOURCE", "") // As above there are issues with authing to our private source on Linux
+        param("env.NUGETDEVRESTORE_SOURCE", "") // As above there are issues with authing to our private source on Linux
         param("env.CHOCOLATEY_VERSION", "%dep.Chocolatey.build.number%")
         param("env.CHOCOLATEY_OFFICIAL_KEY", "%system.teamcity.build.checkoutDir%/chocolatey.official.snk")
         password("env.GITHUB_PAT", "%system.GitHubPAT%", display = ParameterDisplay.HIDDEN, readOnly = true)
@@ -424,26 +425,7 @@ object ChocolateyPosix : BuildType({
         script {
             name = "Build Chocolatey"
             scriptContent = """
-                ./build.official.sh --verbosity=diagnostic
-            """.trimIndent()
-        }
-
-        // Please note that this method will need to be changed to some form of CD after we lock agents down
-        script {
-            name = "Publish TarGz to GitHub Release"
-            conditions {
-                exists("env.GITHUB_PAT")
-                startsWith("teamcity.build.branch", "tags")
-            }
-            scriptContent = """
-                curl \
-                    -X POST \
-                    -H "Accept: application/vnd.github+json" \
-                    -H "Authorization: Bearer %env.GITHUB_PAT%"\
-                    -H "X-GitHub-Api-Version: 2022-11-28" \
-                    -H "Content-Type: application/octet-stream" \
-                    https://uploads.github.com/repos/chocolatey/choco/releases/%env.CHOCOLATEY_VERSION%/assets?name=chocolatey.v%env.CHOCOLATEY_VERSION%.tar.gz \
-                    --data-binary "@code_drop/Packages/Chocolatey/chocolatey.v%env.CHOCOLATEY_VERSION%.tar.gz"
+                ./build.official.sh --verbosity=diagnostic --shouldRunTests=false --shouldRunAnalyze=false
             """.trimIndent()
         }
 
